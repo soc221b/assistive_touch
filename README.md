@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/iendeavor/assistive_touch/blob/main/example/screenshot.png" alt="Example Screenshot" height="500">
+  <img src="https://raw.githubusercontent.com/iendeavor/assistive_touch/main/example/screenshot.png" alt="Example Screenshot" height="500">
 </p>
 
 ## Getting Started

@@ -62,8 +62,7 @@ class AssistiveTouch extends StatefulWidget {
 class _AssistiveTouchState extends State<AssistiveTouch>
     with TickerProviderStateMixin {
   bool isInitialized = false;
-  late double left;
-  late double top;
+  late Offset offset = widget.initialOffset;
   Size size = Size.zero;
   bool isDragging = false;
   bool isIdle = true;
@@ -101,10 +100,8 @@ class _AssistiveTouchState extends State<AssistiveTouch>
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInitialized == false) {
-      left = widget.initialOffset.dx;
-      top = widget.initialOffset.dy;
       isInitialized = true;
-      _setOffset(Offset(left, top));
+      _setOffset(offset);
     }
   }
 
@@ -126,7 +123,7 @@ class _AssistiveTouchState extends State<AssistiveTouch>
         setState(() {
           this.size = size;
         });
-        _setOffset(Offset(left, top));
+        _setOffset(offset);
       },
     );
 
@@ -157,8 +154,8 @@ class _AssistiveTouchState extends State<AssistiveTouch>
           );
 
     child = Positioned(
-      left: left,
-      top: top,
+      left: offset.dx,
+      top: offset.dy,
       child: child,
     );
 
@@ -184,7 +181,10 @@ class _AssistiveTouchState extends State<AssistiveTouch>
   }
 
   void _onDragUpdate(DragUpdateDetails detail) {
-    _setOffset(Offset(left + detail.delta.dx, top + detail.delta.dy));
+    _setOffset(Offset(
+      offset.dx + detail.delta.dx,
+      offset.dy + detail.delta.dy,
+    ));
   }
 
   void _onDragEnd(DraggableDetails detail) {
@@ -193,7 +193,7 @@ class _AssistiveTouchState extends State<AssistiveTouch>
     });
     _scheduleIdle();
 
-    _setOffset(Offset(left, top));
+    _setOffset(offset);
   }
 
   void _scheduleIdle() {
@@ -210,8 +210,7 @@ class _AssistiveTouchState extends State<AssistiveTouch>
   void _setOffset(Offset offset) {
     if (isDragging) {
       setState(() {
-        this.left = offset.dx;
-        this.top = offset.dy;
+        this.offset = offset;
       });
 
       return;
@@ -236,24 +235,26 @@ class _AssistiveTouchState extends State<AssistiveTouch>
     final halfWidth = (right - left) / 2;
 
     if (widget.shouldStickToSide) {
+      final normalizedTop = max(min(offset.dy, bottom), top);
+      final normalizedLeft = max(
+        min(
+          normalizedTop == bottom || normalizedTop == top
+              ? offset.dx
+              : offset.dx < halfWidth
+                  ? left
+                  : right,
+          right,
+        ),
+        left,
+      );
       setState(() {
-        this.top = max(min(offset.dy, bottom), top);
-        this.left = max(
-          min(
-            this.top == bottom || this.top == top
-                ? offset.dx
-                : offset.dx < halfWidth
-                    ? left
-                    : right,
-            right,
-          ),
-          left,
-        );
+        this.offset = Offset(normalizedLeft, normalizedTop);
       });
     } else {
+      final normalizedTop = max(min(offset.dy, bottom), top);
+      final normalizedLeft = max(min(offset.dx, right), left);
       setState(() {
-        this.top = max(min(offset.dy, bottom), top);
-        this.left = max(min(offset.dx, right), left);
+        this.offset = Offset(normalizedLeft, normalizedTop);
       });
     }
   }

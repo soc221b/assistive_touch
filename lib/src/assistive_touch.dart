@@ -220,25 +220,16 @@ class _AssistiveTouchState extends State<AssistiveTouch>
     final screenSize = MediaQuery.of(context).size;
     final screenPadding = MediaQuery.of(context).padding;
     final viewInsets = MediaQuery.of(context).viewInsets;
-    final viewPadding = MediaQuery.of(context).viewPadding;
-    final left = screenPadding.left +
-        viewInsets.left +
-        viewPadding.left +
-        widget.margin.left;
-    final top = screenPadding.top +
-        viewInsets.top +
-        viewPadding.top +
-        widget.margin.top;
+    final left = screenPadding.left + viewInsets.left + widget.margin.left;
+    final top = screenPadding.top + viewInsets.top + widget.margin.top;
     final right = screenSize.width -
         screenPadding.right -
         viewInsets.right -
-        viewPadding.right -
         widget.margin.right -
         size.width;
     final bottom = screenSize.height -
         screenPadding.bottom -
         viewInsets.bottom -
-        viewPadding.bottom -
         widget.margin.bottom -
         size.height;
 

@@ -1,0 +1,23 @@
+name: assistive_touch
+description: A widget just like iPhone Assistive Touch.
+version: 0.1.0
+repository: https://github.com/iendeavor/assistive_touch
+issue_tracker: https://github.com/iendeavor/assistive_touch/issues
+homepage: https://github.com/iendeavor/assistive_touch
+documentation: https://github.com/iendeavor/assistive_touch#readme
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.2.3"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  effective_dart: ^1.3.2
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

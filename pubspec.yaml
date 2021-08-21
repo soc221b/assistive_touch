@@ -4,7 +4,6 @@ version: 0.1.0
 repository: https://github.com/iendeavor/assistive_touch
 issue_tracker: https://github.com/iendeavor/assistive_touch/issues
 homepage: https://github.com/iendeavor/assistive_touch
-documentation: https://github.com/iendeavor/assistive_touch#readme
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

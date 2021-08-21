@@ -63,6 +63,7 @@ class _AssistiveTouchState extends State<AssistiveTouch>
     with TickerProviderStateMixin {
   bool isInitialized = false;
   late Offset offset = widget.initialOffset;
+  late Offset largerOffset = offset;
   Size size = Size.zero;
   bool isDragging = false;
   bool isIdle = true;
@@ -94,6 +95,7 @@ class _AssistiveTouchState extends State<AssistiveTouch>
         _scaleAnimationController.reverse();
       }
     });
+    FocusManager.instance.addListener(listener);
   }
 
   @override
@@ -110,7 +112,20 @@ class _AssistiveTouchState extends State<AssistiveTouch>
     timer?.cancel();
     scaleTimer?.cancel();
     _scaleAnimationController.dispose();
+    FocusManager.instance.removeListener(listener);
     super.dispose();
+  }
+
+  void listener() {
+    Timer(const Duration(milliseconds: 200), () {
+      if (mounted == false) return;
+      largerOffset = Offset(
+        max(largerOffset.dx, offset.dx),
+        max(largerOffset.dy, offset.dy),
+      );
+
+      _setOffset(largerOffset, false);
+    });
   }
 
   @override
@@ -207,7 +222,11 @@ class _AssistiveTouchState extends State<AssistiveTouch>
     });
   }
 
-  void _setOffset(Offset offset) {
+  void _setOffset(Offset offset, [bool shouldUpdateLargerOffset = true]) {
+    if (shouldUpdateLargerOffset) {
+      largerOffset = offset;
+    }
+
     if (isDragging) {
       setState(() {
         this.offset = offset;
